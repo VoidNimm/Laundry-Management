@@ -1,26 +1,35 @@
-import { NextResponse } from 'next/server';
-import prisma from '@/lib/prisma';
-import bcrypt from 'bcryptjs';
+import { NextResponse } from "next/server";
+import prisma from "@/lib/prisma";
+import bcrypt from "bcryptjs";
 
-export async function PUT(request: Request, { params }: { params: { id: string } }) {
+export async function PUT(
+  request: Request,
+  { params }: { params: { id: string } }
+) {
   try {
     const id = parseInt(params.id);
     const { nama, username, password, role, id_outlet } = await request.json();
 
     if (!nama || !username || !role) {
-      return NextResponse.json({ success: false, error: "Nama, username, dan role wajib diisi" }, { status: 400 });
+      return NextResponse.json(
+        { success: false, error: "Nama, username, dan role wajib diisi" },
+        { status: 400 }
+      );
     }
 
     // Check if username already exists (excluding current user)
     const existingUser = await prisma.tb_user.findFirst({
-      where: { 
+      where: {
         username,
-        NOT: { id }
+        NOT: { id },
       },
     });
 
     if (existingUser) {
-      return NextResponse.json({ success: false, error: "Username sudah digunakan" }, { status: 400 });
+      return NextResponse.json(
+        { success: false, error: "Username sudah digunakan" },
+        { status: 400 }
+      );
     }
 
     const updateData: any = {
@@ -56,11 +65,17 @@ export async function PUT(request: Request, { params }: { params: { id: string }
     });
   } catch (error: any) {
     console.error("Update user error:", error);
-    return NextResponse.json({ success: false, error: "Gagal mengupdate pengguna" }, { status: 500 });
+    return NextResponse.json(
+      { success: false, error: "Gagal mengupdate pengguna" },
+      { status: 500 }
+    );
   }
 }
 
-export async function DELETE(request: Request, { params }: { params: { id: string } }) {
+export async function DELETE(
+  request: Request,
+  { params }: { params: { id: string } }
+) {
   try {
     const id = parseInt(params.id);
 
@@ -74,6 +89,9 @@ export async function DELETE(request: Request, { params }: { params: { id: strin
     });
   } catch (error: any) {
     console.error("Delete user error:", error);
-    return NextResponse.json({ success: false, error: "Gagal menghapus pengguna" }, { status: 500 });
+    return NextResponse.json(
+      { success: false, error: "Gagal menghapus pengguna" },
+      { status: 500 }
+    );
   }
 }

@@ -1,13 +1,19 @@
-import { NextResponse } from 'next/server';
-import prisma from '@/lib/prisma';
+import { NextResponse } from "next/server";
+import prisma from "@/lib/prisma";
 
-export async function PUT(request: Request, { params }: { params: { id: string } }) {
+export async function PUT(
+  request: Request,
+  { params }: { params: { id: string } }
+) {
   try {
     const id = parseInt(params.id);
     const { nama, alamat, jenis_kelamin, tlp } = await request.json();
 
     if (!nama) {
-      return NextResponse.json({ success: false, error: "Nama wajib diisi" }, { status: 400 });
+      return NextResponse.json(
+        { success: false, error: "Nama wajib diisi" },
+        { status: 400 }
+      );
     }
 
     const member = await prisma.tb_member.update({
@@ -26,11 +32,17 @@ export async function PUT(request: Request, { params }: { params: { id: string }
     });
   } catch (error: any) {
     console.error("Update member error:", error);
-    return NextResponse.json({ success: false, error: "Gagal mengupdate member" }, { status: 500 });
+    return NextResponse.json(
+      { success: false, error: "Gagal mengupdate member" },
+      { status: 500 }
+    );
   }
 }
 
-export async function DELETE(request: Request, { params }: { params: { id: string } }) {
+export async function DELETE(
+  request: Request,
+  { params }: { params: { id: string } }
+) {
   try {
     const id = parseInt(params.id);
 
@@ -44,6 +56,9 @@ export async function DELETE(request: Request, { params }: { params: { id: strin
     });
   } catch (error: any) {
     console.error("Delete member error:", error);
-    return NextResponse.json({ success: false, error: "Gagal menghapus member" }, { status: 500 });
+    return NextResponse.json(
+      { success: false, error: "Gagal menghapus member" },
+      { status: 500 }
+    );
   }
 }
