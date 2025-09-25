@@ -1,12 +1,19 @@
-import { NextResponse } from "next/server";
+export const runtime = 'nodejs';
+
+import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 
 export async function PUT(
-  request: Request,
-  { params }: { params: { id: string } }
+  request: NextRequest,
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
-    const id = parseInt(params.id);
+    const { id } = await context.params;
+    const outletId = Number(id);
+    if (!Number.isFinite(outletId)) {
+      return NextResponse.json({ success: false, error: "ID tidak valid" }, { status: 400 });
+    }
+
     const { nama, alamat, tlp } = await request.json();
 
     if (!nama) {
@@ -17,7 +24,7 @@ export async function PUT(
     }
 
     const outlet = await prisma.tb_outlet.update({
-      where: { id },
+      where: { id: outletId },
       data: {
         nama,
         alamat: alamat || null,
@@ -30,6 +37,9 @@ export async function PUT(
       data: outlet,
     });
   } catch (error: any) {
+    if (error?.code === 'P2025') {
+      return NextResponse.json({ success: false, error: "Outlet tidak ditemukan" }, { status: 404 });
+    }
     console.error("Update outlet error:", error);
     return NextResponse.json(
       { success: false, error: "Gagal mengupdate outlet" },
@@ -39,14 +49,18 @@ export async function PUT(
 }
 
 export async function DELETE(
-  request: Request,
-  { params }: { params: { id: string } }
+  request: NextRequest,
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
-    const id = parseInt(params.id);
+    const { id } = await context.params;
+    const outletId = Number(id);
+    if (!Number.isFinite(outletId)) {
+      return NextResponse.json({ success: false, error: "ID tidak valid" }, { status: 400 });
+    }
 
     await prisma.tb_outlet.delete({
-      where: { id },
+      where: { id: outletId },
     });
 
     return NextResponse.json({
@@ -54,6 +68,9 @@ export async function DELETE(
       message: "Outlet berhasil dihapus",
     });
   } catch (error: any) {
+    if (error?.code === 'P2025') {
+      return NextResponse.json({ success: false, error: "Outlet tidak ditemukan" }, { status: 404 });
+    }
     console.error("Delete outlet error:", error);
     return NextResponse.json(
       { success: false, error: "Gagal menghapus outlet" },

@@ -1,4 +1,3 @@
-import { LogoIcon } from '@/components/logo'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -15,7 +14,6 @@ export default function LoginPage() {
                         <Link
                             href="/"
                             aria-label="go home">
-                            <LogoIcon />
                         </Link>
                         <h1 className="mb-1 mt-4 text-xl font-semibold">Sign In to LaunDry</h1>
                         <p className="text-sm">Welcome back! Sign in to continue</p>

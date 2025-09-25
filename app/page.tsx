@@ -173,7 +173,7 @@ export default async function Page() {
               <div className="px-4 lg:px-6">
                 <ChartAreaInteractive chartData={laundryData.chartData} />
               </div>
-              <DataTable data={data} />
+              <DataTable />
             </div>
           </div>
         </div>

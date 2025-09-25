@@ -1,12 +1,19 @@
-import { NextResponse } from "next/server";
+export const runtime = 'nodejs';
+
+import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 
 export async function PUT(
-  request: Request,
-  { params }: { params: { id: string } }
+  request: NextRequest,
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
-    const id = parseInt(params.id);
+    const { id } = await context.params;
+    const packageId = Number(id);
+    if (!Number.isFinite(packageId)) {
+      return NextResponse.json({ success: false, error: "ID tidak valid" }, { status: 400 });
+    }
+
     const { nama_paket, jenis, harga, id_outlet } = await request.json();
 
     if (!nama_paket || !jenis || !harga || !id_outlet) {
@@ -17,7 +24,7 @@ export async function PUT(
     }
 
     const updatedPackage = await prisma.tb_paket.update({
-      where: { id },
+      where: { id: packageId },
       data: {
         nama_paket,
         jenis,
@@ -38,6 +45,9 @@ export async function PUT(
       data: updatedPackage,
     });
   } catch (error: any) {
+    if (error?.code === 'P2025') {
+      return NextResponse.json({ success: false, error: "Paket tidak ditemukan" }, { status: 404 });
+    }
     console.error("Update package error:", error);
     return NextResponse.json(
       { success: false, error: "Gagal mengupdate paket" },
@@ -47,14 +57,18 @@ export async function PUT(
 }
 
 export async function DELETE(
-  request: Request,
-  { params }: { params: { id: string } }
+  request: NextRequest,
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
-    const id = parseInt(params.id);
+    const { id } = await context.params;
+    const packageId = Number(id);
+    if (!Number.isFinite(packageId)) {
+      return NextResponse.json({ success: false, error: "ID tidak valid" }, { status: 400 });
+    }
 
     await prisma.tb_paket.delete({
-      where: { id },
+      where: { id: packageId },
     });
 
     return NextResponse.json({
@@ -62,6 +76,9 @@ export async function DELETE(
       message: "Paket berhasil dihapus",
     });
   } catch (error: any) {
+    if (error?.code === 'P2025') {
+      return NextResponse.json({ success: false, error: "Paket tidak ditemukan" }, { status: 404 });
+    }
     console.error("Delete package error:", error);
     return NextResponse.json(
       { success: false, error: "Gagal menghapus paket" },

@@ -1,13 +1,20 @@
-import { NextResponse } from "next/server";
+export const runtime = 'nodejs';
+
+import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import bcrypt from "bcryptjs";
 
 export async function PUT(
-  request: Request,
-  { params }: { params: { id: string } }
+  request: NextRequest,
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
-    const id = parseInt(params.id);
+    const { id } = await context.params;
+    const userId = Number(id);
+    if (!Number.isFinite(userId)) {
+      return NextResponse.json({ success: false, error: "ID tidak valid" }, { status: 400 });
+    }
+
     const { nama, username, password, role, id_outlet } = await request.json();
 
     if (!nama || !username || !role) {
@@ -17,11 +24,10 @@ export async function PUT(
       );
     }
 
-    // Check if username already exists (excluding current user)
     const existingUser = await prisma.tb_user.findFirst({
       where: {
         username,
-        NOT: { id },
+        NOT: { id: userId },
       },
     });
 
@@ -39,13 +45,12 @@ export async function PUT(
       id_outlet: id_outlet || null,
     };
 
-    // Only update password if provided
     if (password) {
       updateData.password = await bcrypt.hash(password, 10);
     }
 
     const user = await prisma.tb_user.update({
-      where: { id },
+      where: { id: userId },
       data: updateData,
       include: {
         tb_outlet: {
@@ -56,7 +61,6 @@ export async function PUT(
       },
     });
 
-    // Remove password from response
     const { password: _, ...userWithoutPassword } = user;
 
     return NextResponse.json({
@@ -64,6 +68,9 @@ export async function PUT(
       data: userWithoutPassword,
     });
   } catch (error: any) {
+    if (error?.code === 'P2025') {
+      return NextResponse.json({ success: false, error: "Pengguna tidak ditemukan" }, { status: 404 });
+    }
     console.error("Update user error:", error);
     return NextResponse.json(
       { success: false, error: "Gagal mengupdate pengguna" },
@@ -73,14 +80,18 @@ export async function PUT(
 }
 
 export async function DELETE(
-  request: Request,
-  { params }: { params: { id: string } }
+  request: NextRequest,
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
-    const id = parseInt(params.id);
+    const { id } = await context.params;
+    const userId = Number(id);
+    if (!Number.isFinite(userId)) {
+      return NextResponse.json({ success: false, error: "ID tidak valid" }, { status: 400 });
+    }
 
     await prisma.tb_user.delete({
-      where: { id },
+      where: { id: userId },
     });
 
     return NextResponse.json({
@@ -88,6 +99,9 @@ export async function DELETE(
       message: "Pengguna berhasil dihapus",
     });
   } catch (error: any) {
+    if (error?.code === 'P2025') {
+      return NextResponse.json({ success: false, error: "Pengguna tidak ditemukan" }, { status: 404 });
+    }
     console.error("Delete user error:", error);
     return NextResponse.json(
       { success: false, error: "Gagal menghapus pengguna" },

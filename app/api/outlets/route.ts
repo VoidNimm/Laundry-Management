@@ -1,7 +1,12 @@
-import { NextResponse } from 'next/server';
+export const runtime = 'nodejs';
+
+import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 
-export async function GET() {
+export async function GET(
+  request: NextRequest,
+) {
+  
   try {
     const outlets = await prisma.tb_outlet.findMany({
       orderBy: {
@@ -19,7 +24,7 @@ export async function GET() {
   }
 }
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   try {
     const { nama, alamat, tlp } = await request.json();
 

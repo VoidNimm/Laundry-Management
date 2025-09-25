@@ -1,3 +1,5 @@
+export const runtime = 'nodejs';
+
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import type { Prisma } from '@prisma/client';
@@ -121,29 +123,6 @@ async function updateBusinessRecap(outletId: number) {
       },
       _sum: {
         biaya_tambahan: true
-      }
-    });
-
-    // Update or create recap record
-    await prisma.businessRecap.upsert({
-      where: {
-        outletId_date: {
-          outletId,
-          date: today
-        }
-      },
-      update: {
-        dailyRevenue: dailyRevenue._sum.biaya_tambahan || 0,
-        monthlyRevenue: monthlyRevenue._sum.biaya_tambahan || 0,
-        updatedAt: new Date()
-      },
-      create: {
-        outletId,
-        date: today,
-        dailyRevenue: dailyRevenue._sum.biaya_tambahan || 0,
-        monthlyRevenue: monthlyRevenue._sum.biaya_tambahan || 0,
-        createdAt: new Date(),
-        updatedAt: new Date()
       }
     });
   } catch (error) {
