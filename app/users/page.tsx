@@ -182,118 +182,120 @@ export default function UsersPage() {
           <div className="@container/main flex flex-1 flex-col gap-2">
             <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
               <div className="px-4 lg:px-6">
-      <div className="flex items-end justify-between mb-6">
-        <div>
-          <h1 className="text-3xl font-semibold">Manajemen Pengguna</h1>
-          <p className="text-muted-foreground mt-1">Kelola akun pengguna sistem</p>
-        </div>
-        <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-          <DialogTrigger asChild>
-            <Button onClick={() => setDialogOpen(true)}>
-              <IconPlus className="mr-2 h-4 w-4" />
-              Tambah Pengguna
-            </Button>
-          </DialogTrigger>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>{editingUser ? "Edit Pengguna" : "Tambah Pengguna Baru"}</DialogTitle>
-              <DialogDescription>
-                {editingUser ? "Update informasi pengguna" : "Tambahkan pengguna baru ke sistem"}
-              </DialogDescription>
-            </DialogHeader>
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="nama">Nama Lengkap</Label>
-                <div className="relative">
-                  <IconUser className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                  <Input
-                    id="nama"
-                    placeholder="Masukkan nama lengkap"
-                    value={formData.nama}
-                    onChange={(e) => setFormData({ ...formData, nama: e.target.value })}
-                    className="pl-10"
-                    required
-                  />
+                <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between mb-6">
+                  <div className="min-w-0">
+                    <h1 className="text-3xl font-semibold leading-tight">Manajemen Pengguna</h1>
+                    <p className="text-muted-foreground mt-1">Kelola akun pengguna sistem</p>
+                  </div>
+                  <div className="flex flex-col gap-2 w-full lg:w-auto lg:flex-row lg:items-center lg:gap-4 lg:shrink-0 mt-2 lg:mt-0">
+                    <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+                      <DialogTrigger asChild>
+                        <Button className="w-full lg:w-auto" onClick={() => setDialogOpen(true)}>
+                          <IconPlus className="mr-2 h-4 w-4" />
+                          Tambah Pengguna
+                        </Button>
+                      </DialogTrigger>
+                      <DialogContent>
+                        <DialogHeader>
+                          <DialogTitle>{editingUser ? "Edit Pengguna" : "Tambah Pengguna Baru"}</DialogTitle>
+                          <DialogDescription>
+                            {editingUser ? "Update informasi pengguna" : "Tambahkan pengguna baru ke sistem"}
+                          </DialogDescription>
+                        </DialogHeader>
+                        <form onSubmit={handleSubmit} className="space-y-4">
+                          <div className="space-y-2">
+                            <Label htmlFor="nama">Nama Lengkap</Label>
+                            <div className="relative">
+                              <IconUser className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                              <Input
+                                id="nama"
+                                placeholder="Masukkan nama lengkap"
+                                value={formData.nama}
+                                onChange={(e) => setFormData({ ...formData, nama: e.target.value })}
+                                className="pl-10"
+                                required
+                              />
+                            </div>
+                          </div>
+
+                          <div className="space-y-2">
+                            <Label htmlFor="username">Username</Label>
+                            <div className="relative">
+                              <IconUser className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                              <Input
+                                id="username"
+                                placeholder="Masukkan username"
+                                value={formData.username}
+                                onChange={(e) => setFormData({ ...formData, username: e.target.value })}
+                                className="pl-10"
+                                required
+                              />
+                            </div>
+                          </div>
+
+                          <div className="space-y-2">
+                            <Label htmlFor="password">Password {editingUser && "(kosongkan jika tidak ingin mengubah)"}</Label>
+                            <div className="relative">
+                              <IconLock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                              <Input
+                                id="password"
+                                type="password"
+                                placeholder="Masukkan password"
+                                value={formData.password}
+                                onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                                className="pl-10"
+                                required={!editingUser}
+                              />
+                            </div>
+                          </div>
+
+                          <div className="space-y-2">
+                            <Label htmlFor="role">Role</Label>
+                            <div className="relative">
+                              <IconUserCheck className="absolute left-3 top-3 h-4 w-4 text-muted-foreground z-10" />
+                              <Select value={formData.role} onValueChange={(value) => setFormData({ ...formData, role: value })} required>
+                                <SelectTrigger className="pl-10">
+                                  <SelectValue placeholder="Pilih role" />
+                                </SelectTrigger>
+                                <SelectContent className="z-50">
+                                  <SelectItem value="admin">Admin</SelectItem>
+                                  <SelectItem value="kasir">Kasir</SelectItem>
+                                  <SelectItem value="owner">Owner</SelectItem>
+                                </SelectContent>
+                              </Select>
+                            </div>
+                          </div>
+
+                          <div className="space-y-2">
+                            <Label htmlFor="id_outlet">Outlet (Opsional)</Label>
+                            <Select value={formData.id_outlet} onValueChange={(value) => setFormData({ ...formData, id_outlet: value })}>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Pilih outlet" />
+                              </SelectTrigger>
+                              <SelectContent className="z-50">
+                                <SelectItem value="none">Tidak ada outlet</SelectItem>
+                                {outlets.map((outlet) => (
+                                  <SelectItem key={outlet.id} value={outlet.id.toString()}>
+                                    {outlet.nama}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                          </div>
+
+                          <div className="flex justify-end space-x-2">
+                            <Button type="button" variant="outline" onClick={handleDialogClose}>
+                              Batal
+                            </Button>
+                            <Button type="submit">
+                              {editingUser ? "Update" : "Simpan"}
+                            </Button>
+                          </div>
+                        </form>
+                      </DialogContent>
+                    </Dialog>
+                  </div>
                 </div>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="username">Username</Label>
-                <div className="relative">
-                  <IconUser className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                  <Input
-                    id="username"
-                    placeholder="Masukkan username"
-                    value={formData.username}
-                    onChange={(e) => setFormData({ ...formData, username: e.target.value })}
-                    className="pl-10"
-                    required
-                  />
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="password">Password {editingUser && "(kosongkan jika tidak ingin mengubah)"}</Label>
-                <div className="relative">
-                  <IconLock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                  <Input
-                    id="password"
-                    type="password"
-                    placeholder="Masukkan password"
-                    value={formData.password}
-                    onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                    className="pl-10"
-                    required={!editingUser}
-                  />
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="role">Role</Label>
-                <div className="relative">
-                  <IconUserCheck className="absolute left-3 top-3 h-4 w-4 text-muted-foreground z-10" />
-                  <Select value={formData.role} onValueChange={(value) => setFormData({ ...formData, role: value })} required>
-                    <SelectTrigger className="pl-10">
-                      <SelectValue placeholder="Pilih role" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="admin">Admin</SelectItem>
-                      <SelectItem value="kasir">Kasir</SelectItem>
-                      <SelectItem value="owner">Owner</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="id_outlet">Outlet (Opsional)</Label>
-                <Select value={formData.id_outlet} onValueChange={(value) => setFormData({ ...formData, id_outlet: value })}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Pilih outlet" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="none">Tidak ada outlet</SelectItem>
-                    {outlets.map((outlet) => (
-                      <SelectItem key={outlet.id} value={outlet.id.toString()}>
-                        {outlet.nama}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div className="flex justify-end space-x-2">
-                <Button type="button" variant="outline" onClick={handleDialogClose}>
-                  Batal
-                </Button>
-                <Button type="submit">
-                  {editingUser ? "Update" : "Simpan"}
-                </Button>
-              </div>
-            </form>
-          </DialogContent>
-        </Dialog>
-      </div>
 
       <Card>
         <CardHeader>

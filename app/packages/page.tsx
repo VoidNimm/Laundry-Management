@@ -194,101 +194,103 @@ export default function PackagesPage() {
           <div className="@container/main flex flex-1 flex-col gap-2">
             <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
               <div className="px-4 lg:px-6">
-      <div className="flex items-end justify-between mb-6">
-        <div>
-          <h1 className="text-3xl font-semibold">Manajemen Paket</h1>
-          <p className="text-muted-foreground mt-1">Kelola paket layanan laundry</p>
-        </div>
-        <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-          <DialogTrigger asChild>
-            <Button onClick={() => setDialogOpen(true)}>
-              <IconPlus className="mr-2 h-4 w-4" />
-              Tambah Paket
-            </Button>
-          </DialogTrigger>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>{editingPackage ? "Edit Paket" : "Tambah Paket Baru"}</DialogTitle>
-              <DialogDescription>
-                {editingPackage ? "Update informasi paket" : "Tambahkan paket layanan baru"}
-              </DialogDescription>
-            </DialogHeader>
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="nama_paket">Nama Paket</Label>
-                <div className="relative">
-                  <IconPackage className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                  <Input
-                    id="nama_paket"
-                    placeholder="Masukkan nama paket"
-                    value={formData.nama_paket}
-                    onChange={(e) => setFormData({ ...formData, nama_paket: e.target.value })}
-                    className="pl-10"
-                    required
-                  />
+                <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between mb-6">
+                  <div className="min-w-0">
+                    <h1 className="text-3xl font-semibold leading-tight">Manajemen Paket</h1>
+                    <p className="text-muted-foreground mt-1">Kelola paket layanan laundry</p>
+                  </div>
+                  <div className="flex flex-col gap-2 w-full lg:w-auto lg:flex-row lg:items-center lg:gap-4 lg:shrink-0 mt-2 lg:mt-0">
+                    <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+                      <DialogTrigger asChild>
+                        <Button className="w-full lg:w-auto" onClick={() => setDialogOpen(true)}>
+                          <IconPlus className="mr-2 h-4 w-4" />
+                          Tambah Paket
+                        </Button>
+                      </DialogTrigger>
+                      <DialogContent>
+                        <DialogHeader>
+                          <DialogTitle>{editingPackage ? "Edit Paket" : "Tambah Paket Baru"}</DialogTitle>
+                          <DialogDescription>
+                            {editingPackage ? "Update informasi paket" : "Tambahkan paket layanan baru"}
+                          </DialogDescription>
+                        </DialogHeader>
+                        <form onSubmit={handleSubmit} className="space-y-4">
+                          <div className="space-y-2">
+                            <Label htmlFor="nama_paket">Nama Paket</Label>
+                            <div className="relative">
+                              <IconPackage className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                              <Input
+                                id="nama_paket"
+                                placeholder="Masukkan nama paket"
+                                value={formData.nama_paket}
+                                onChange={(e) => setFormData({ ...formData, nama_paket: e.target.value })}
+                                className="pl-10"
+                                required
+                              />
+                            </div>
+                          </div>
+
+                          <div className="space-y-2">
+                            <Label htmlFor="jenis">Jenis Paket</Label>
+                            <Select value={formData.jenis} onValueChange={(value) => setFormData({ ...formData, jenis: value })} required>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Pilih jenis paket" />
+                              </SelectTrigger>
+                              <SelectContent className="z-50">
+                                <SelectItem value="kiloan">Kiloan</SelectItem>
+                                <SelectItem value="selimut">Selimut</SelectItem>
+                                <SelectItem value="bed_cover">Bed Cover</SelectItem>
+                                <SelectItem value="kaos">Kaos</SelectItem>
+                                <SelectItem value="lain">Lainnya</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </div>
+
+                          <div className="space-y-2">
+                            <Label htmlFor="harga">Harga</Label>
+                            <div className="relative">
+                              <IconCurrencyDollar className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                              <Input
+                                id="harga"
+                                type="number"
+                                placeholder="Masukkan harga"
+                                value={formData.harga}
+                                onChange={(e) => setFormData({ ...formData, harga: e.target.value })}
+                                className="pl-10"
+                                required
+                              />
+                            </div>
+                          </div>
+
+                          <div className="space-y-2">
+                            <Label htmlFor="id_outlet">Outlet</Label>
+                            <Select value={formData.id_outlet} onValueChange={(value) => setFormData({ ...formData, id_outlet: value })} required>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Pilih outlet" />
+                              </SelectTrigger>
+                              <SelectContent className="z-50">
+                                {outlets.map((outlet) => (
+                                  <SelectItem key={outlet.id} value={outlet.id.toString()}>
+                                    {outlet.nama}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                          </div>
+
+                          <div className="flex justify-end space-x-2">
+                            <Button type="button" variant="outline" onClick={handleDialogClose}>
+                              Batal
+                            </Button>
+                            <Button type="submit">
+                              {editingPackage ? "Update" : "Simpan"}
+                            </Button>
+                          </div>
+                        </form>
+                      </DialogContent>
+                    </Dialog>
+                  </div>
                 </div>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="jenis">Jenis Paket</Label>
-                <Select value={formData.jenis} onValueChange={(value) => setFormData({ ...formData, jenis: value })} required>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Pilih jenis paket" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="kiloan">Kiloan</SelectItem>
-                    <SelectItem value="selimut">Selimut</SelectItem>
-                    <SelectItem value="bed_cover">Bed Cover</SelectItem>
-                    <SelectItem value="kaos">Kaos</SelectItem>
-                    <SelectItem value="lain">Lainnya</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="harga">Harga</Label>
-                <div className="relative">
-                  <IconCurrencyDollar className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                  <Input
-                    id="harga"
-                    type="number"
-                    placeholder="Masukkan harga"
-                    value={formData.harga}
-                    onChange={(e) => setFormData({ ...formData, harga: e.target.value })}
-                    className="pl-10"
-                    required
-                  />
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="id_outlet">Outlet</Label>
-                <Select value={formData.id_outlet} onValueChange={(value) => setFormData({ ...formData, id_outlet: value })} required>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Pilih outlet" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {outlets.map((outlet) => (
-                      <SelectItem key={outlet.id} value={outlet.id.toString()}>
-                        {outlet.nama}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div className="flex justify-end space-x-2">
-                <Button type="button" variant="outline" onClick={handleDialogClose}>
-                  Batal
-                </Button>
-                <Button type="submit">
-                  {editingPackage ? "Update" : "Simpan"}
-                </Button>
-              </div>
-            </form>
-          </DialogContent>
-        </Dialog>
-      </div>
 
       <Card>
         <CardHeader>

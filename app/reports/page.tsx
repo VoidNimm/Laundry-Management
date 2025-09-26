@@ -106,23 +106,32 @@ export default function ReportsPage() {
           <div className="@container/main flex flex-1 flex-col gap-2">
             <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
               <div className="px-4 lg:px-6">
-                <div className="flex items-end justify-between mb-6">
-                  <div>
-                    <h1 className="text-3xl font-semibold">Laporan Bisnis</h1>
-                    <p className="text-muted-foreground mt-1">Analisis performa dan statistik bisnis laundry</p>
+                <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between mb-6">
+                  <div className="min-w-0">
+                    <h1 className="text-3xl font-semibold leading-tight">
+                      Laporan Bisnis
+                    </h1>
+                    <p className="text-muted-foreground mt-1">
+                      Analisis performa dan statistik bisnis laundry
+                    </p>
                   </div>
-                  <div className="flex items-center gap-4">
+
+                  <div className="flex flex-col gap-2 w-full lg:w-auto lg:flex-row lg:items-center lg:gap-4 lg:shrink-0 mt-2 lg:mt-0">
                     <Select value={period} onValueChange={setPeriod}>
-                      <SelectTrigger className="w-40">
+                      <SelectTrigger className="w-full lg:w-48">
                         <SelectValue placeholder="Pilih periode" />
                       </SelectTrigger>
-                      <SelectContent>
+                      <SelectContent className="z-50">
                         <SelectItem value="7">Minggu Ini</SelectItem>
                         <SelectItem value="30">1 Bulan Terakhir</SelectItem>
                         <SelectItem value="90">3 Bulan Terakhir</SelectItem>
                       </SelectContent>
                     </Select>
-                    <Button onClick={() => exportReport('excel')}>
+
+                    <Button
+                      className="w-full lg:w-auto"
+                      onClick={() => exportReport("excel")}
+                    >
                       <IconDownload className="mr-2 h-4 w-4" />
                       Export Excel
                     </Button>

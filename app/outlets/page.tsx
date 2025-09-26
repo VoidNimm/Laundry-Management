@@ -140,81 +140,83 @@ export default function OutletsPage() {
           <div className="@container/main flex flex-1 flex-col gap-2">
             <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
               <div className="px-4 lg:px-6">
-      <div className="flex items-end justify-between mb-6">
-        <div>
-          <h1 className="text-3xl font-semibold">Manajemen Outlet</h1>
-          <p className="text-muted-foreground mt-1">Kelola data outlet laundry</p>
-        </div>
-        <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-          <DialogTrigger asChild>
-            <Button onClick={() => setDialogOpen(true)}>
-              <IconPlus className="mr-2 h-4 w-4" />
-              Tambah Outlet
-            </Button>
-          </DialogTrigger>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>{editingOutlet ? "Edit Outlet" : "Tambah Outlet Baru"}</DialogTitle>
-              <DialogDescription>
-                {editingOutlet ? "Update informasi outlet" : "Tambahkan outlet baru ke sistem"}
-              </DialogDescription>
-            </DialogHeader>
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="nama">Nama Outlet</Label>
-                <div className="relative">
-                  <IconUser className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                  <Input
-                    id="nama"
-                    placeholder="Masukkan nama outlet"
-                    value={formData.nama}
-                    onChange={(e) => setFormData({ ...formData, nama: e.target.value })}
-                    className="pl-10"
-                    required
-                  />
-                </div>
-              </div>
+                <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between mb-6">
+                  <div className="min-w-0">
+                    <h1 className="text-3xl font-semibold leading-tight">Manajemen Outlet</h1>
+                    <p className="text-muted-foreground mt-1">Kelola data outlet laundry</p>
+                  </div>
+                  <div className="flex flex-col gap-2 w-full lg:w-auto lg:flex-row lg:items-center lg:gap-4 lg:shrink-0 mt-2 lg:mt-0">
+                    <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+                      <DialogTrigger asChild>
+                        <Button className="w-full lg:w-auto" onClick={() => setDialogOpen(true)}>
+                          <IconPlus className="mr-2 h-4 w-4" />
+                          Tambah Outlet
+                        </Button>
+                      </DialogTrigger>
+                      <DialogContent>
+                        <DialogHeader>
+                          <DialogTitle>{editingOutlet ? "Edit Outlet" : "Tambah Outlet Baru"}</DialogTitle>
+                          <DialogDescription>
+                            {editingOutlet ? "Update informasi outlet" : "Tambahkan outlet baru ke sistem"}
+                          </DialogDescription>
+                        </DialogHeader>
+                        <form onSubmit={handleSubmit} className="space-y-4">
+                          <div className="space-y-2">
+                            <Label htmlFor="nama">Nama Outlet</Label>
+                            <div className="relative">
+                              <IconUser className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                              <Input
+                                id="nama"
+                                placeholder="Masukkan nama outlet"
+                                value={formData.nama}
+                                onChange={(e) => setFormData({ ...formData, nama: e.target.value })}
+                                className="pl-10"
+                                required
+                              />
+                            </div>
+                          </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="alamat">Alamat</Label>
-                <div className="relative">
-                  <IconMapPin className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                  <Input
-                    id="alamat"
-                    placeholder="Masukkan alamat outlet"
-                    value={formData.alamat}
-                    onChange={(e) => setFormData({ ...formData, alamat: e.target.value })}
-                    className="pl-10"
-                  />
-                </div>
-              </div>
+                          <div className="space-y-2">
+                            <Label htmlFor="alamat">Alamat</Label>
+                            <div className="relative">
+                              <IconMapPin className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                              <Input
+                                id="alamat"
+                                placeholder="Masukkan alamat outlet"
+                                value={formData.alamat}
+                                onChange={(e) => setFormData({ ...formData, alamat: e.target.value })}
+                                className="pl-10"
+                              />
+                            </div>
+                          </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="tlp">Nomor Telepon</Label>
-                <div className="relative">
-                  <IconPhone className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                  <Input
-                    id="tlp"
-                    placeholder="Masukkan nomor telepon"
-                    value={formData.tlp}
-                    onChange={(e) => setFormData({ ...formData, tlp: e.target.value })}
-                    className="pl-10"
-                  />
-                </div>
-              </div>
+                          <div className="space-y-2">
+                            <Label htmlFor="tlp">Nomor Telepon</Label>
+                            <div className="relative">
+                              <IconPhone className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                              <Input
+                                id="tlp"
+                                placeholder="Masukkan nomor telepon"
+                                value={formData.tlp}
+                                onChange={(e) => setFormData({ ...formData, tlp: e.target.value })}
+                                className="pl-10"
+                              />
+                            </div>
+                          </div>
 
-              <div className="flex justify-end space-x-2">
-                <Button type="button" variant="outline" onClick={handleDialogClose}>
-                  Batal
-                </Button>
-                <Button type="submit">
-                  {editingOutlet ? "Update" : "Simpan"}
-                </Button>
-              </div>
-            </form>
-          </DialogContent>
-        </Dialog>
-      </div>
+                          <div className="flex justify-end space-x-2">
+                            <Button type="button" variant="outline" onClick={handleDialogClose}>
+                              Batal
+                            </Button>
+                            <Button type="submit">
+                              {editingOutlet ? "Update" : "Simpan"}
+                            </Button>
+                          </div>
+                        </form>
+                      </DialogContent>
+                    </Dialog>
+                  </div>
+                </div>
 
       <Card>
         <CardHeader>
