@@ -1,5 +1,6 @@
-import { NextResponse } from 'next/server';
-import prisma from '@/lib/prisma';
+import { NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
+import prisma from "@/lib/prisma";
 
 export async function GET() {
   try {
@@ -12,7 +13,7 @@ export async function GET() {
         },
       },
       orderBy: {
-        created_at: 'desc',
+        created_at: "desc",
       },
     });
 
@@ -22,7 +23,10 @@ export async function GET() {
     });
   } catch (error: any) {
     console.error("Get packages error:", error);
-    return NextResponse.json({ success: false, error: "Gagal memuat data paket" }, { status: 500 });
+    return NextResponse.json(
+      { success: false, error: "Gagal memuat data paket" },
+      { status: 500 }
+    );
   }
 }
 
@@ -31,7 +35,10 @@ export async function POST(request: Request) {
     const { nama_paket, jenis, harga, id_outlet } = await request.json();
 
     if (!nama_paket || !jenis || !harga || !id_outlet) {
-      return NextResponse.json({ success: false, error: "Semua field wajib diisi" }, { status: 400 });
+      return NextResponse.json(
+        { success: false, error: "Semua field wajib diisi" },
+        { status: 400 }
+      );
     }
 
     const newPackage = await prisma.tb_paket.create({
@@ -50,12 +57,19 @@ export async function POST(request: Request) {
       },
     });
 
+    // Revalidate halaman transaksi agar paket baru muncul di form
+    revalidatePath("/transaksi");
+    revalidatePath("/");
+
     return NextResponse.json({
       success: true,
       data: newPackage,
     });
   } catch (error: any) {
     console.error("Create package error:", error);
-    return NextResponse.json({ success: false, error: "Gagal menambahkan paket" }, { status: 500 });
+    return NextResponse.json(
+      { success: false, error: "Gagal menambahkan paket" },
+      { status: 500 }
+    );
   }
 }

@@ -28,8 +28,16 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/components/ui/command";
 import { Calendar } from "@/components/ui/calendar";
-import { Calendar as CalendarIcon } from "lucide-react";
+import { Calendar as CalendarIcon, Check, ChevronsUpDown } from "lucide-react";
 import { format } from "date-fns";
 import {
   IconTrash,
@@ -280,29 +288,82 @@ export default function TransaksiForm({
             control={form.control}
             name="id_member"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="flex flex-col">
                 <FormLabel>
                   <IconUser className="inline mr-1" />
                   Member
                 </FormLabel>
-                <Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                >
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Pilih Member (Opsional)" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    <SelectItem value="none">Tidak ada member</SelectItem>
-                    {members?.map((member) => (
-                      <SelectItem key={member.id} value={member.id.toString()}>
-                        {member.nama}
-                      </SelectItem>
-                    )) || []}
-                  </SelectContent>
-                </Select>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <FormControl>
+                      <Button
+                        variant="outline"
+                        role="combobox"
+                        className={cn(
+                          "w-full justify-between",
+                          !field.value && "text-muted-foreground"
+                        )}
+                      >
+                        {field.value && field.value !== "none"
+                          ? members?.find(
+                              (member) => member.id.toString() === field.value
+                            )?.nama || "Pilih Member"
+                          : field.value === "none"
+                          ? "Tidak ada member"
+                          : "Pilih Member (Opsional)"}
+                        <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                      </Button>
+                    </FormControl>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-full p-0" align="start">
+                    <Command>
+                      <CommandInput placeholder="Cari member..." />
+                      <CommandList>
+                        <CommandEmpty>Member tidak ditemukan.</CommandEmpty>
+                        <CommandGroup>
+                          <CommandItem
+                            value="none"
+                            onSelect={() => {
+                              form.setValue("id_member", "none");
+                            }}
+                          >
+                            <Check
+                              className={cn(
+                                "mr-2 h-4 w-4",
+                                field.value === "none"
+                                  ? "opacity-100"
+                                  : "opacity-0"
+                              )}
+                            />
+                            Tidak ada member
+                          </CommandItem>
+                          {members?.map((member) => (
+                            <CommandItem
+                              key={member.id}
+                              value={member.nama}
+                              onSelect={() => {
+                                form.setValue(
+                                  "id_member",
+                                  member.id.toString()
+                                );
+                              }}
+                            >
+                              <Check
+                                className={cn(
+                                  "mr-2 h-4 w-4",
+                                  field.value === member.id.toString()
+                                    ? "opacity-100"
+                                    : "opacity-0"
+                                )}
+                              />
+                              {member.nama}
+                            </CommandItem>
+                          )) || []}
+                        </CommandGroup>
+                      </CommandList>
+                    </Command>
+                  </PopoverContent>
+                </Popover>
                 <FormMessage />
               </FormItem>
             )}
