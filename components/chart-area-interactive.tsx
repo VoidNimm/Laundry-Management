@@ -44,7 +44,7 @@ export function ChartAreaInteractive({ chartData }: { chartData: { date: string;
         <CardTitle>Total Transaksi</CardTitle>
         <CardDescription>
           <span className="hidden @[540px]/card:block">
-            Total transaksi harian untuk 30 hari terakhir
+            Grafik dari seluruh transaksi harian
           </span>
           <span className="@[540px]/card:hidden">30 hari terakhir</span>
         </CardDescription>

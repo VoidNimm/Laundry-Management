@@ -304,18 +304,23 @@ export default function TransaksiForm({
                           !field.value && "text-muted-foreground"
                         )}
                       >
-                        {field.value && field.value !== "none"
-                          ? members?.find(
-                              (member) => member.id.toString() === field.value
-                            )?.nama || "Pilih Member"
-                          : field.value === "none"
-                          ? "Tidak ada member"
-                          : "Pilih Member (Opsional)"}
+                        <span className="truncate">
+                          {field.value && field.value !== "none"
+                            ? members?.find(
+                                (member) => member.id.toString() === field.value
+                              )?.nama || "Pilih Member"
+                            : field.value === "none"
+                            ? "Tidak ada member"
+                            : "Pilih Member (Opsional)"}
+                        </span>
                         <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                       </Button>
                     </FormControl>
                   </PopoverTrigger>
-                  <PopoverContent className="w-full p-0" align="start">
+                  <PopoverContent
+                    className="w-[200px] sm:w-[300px] md:w-[350px] p-0"
+                    align="start"
+                  >
                     <Command>
                       <CommandInput placeholder="Cari member..." />
                       <CommandList>
@@ -540,7 +545,7 @@ export default function TransaksiForm({
           </div>
 
           <div className="overflow-x-auto -mx-2 sm:mx-0">
-            <table className="w-full border-collapse min-w-[600px] sm:min-w-0">
+            <table className="w-full border-collapse min-w-[500px] sm:min-w-0">
               <thead>
                 <tr className="border-b">
                   <th className="text-left py-3 px-2 sm:px-3 font-medium text-sm">
@@ -554,9 +559,6 @@ export default function TransaksiForm({
                   </th>
                   <th className="text-left py-3 px-2 sm:px-3 font-medium text-sm">
                     Subtotal
-                  </th>
-                  <th className="text-left py-3 px-2 sm:px-3 font-medium text-sm">
-                    Keterangan
                   </th>
                   <th className="text-left py-3 px-2 sm:px-3 font-medium text-sm">
                     Aksi
@@ -641,24 +643,6 @@ export default function TransaksiForm({
                             form.watch(`items.${index}.paket_id`)
                         )?.harga || 0) * (form.watch(`items.${index}.qty`) || 0)
                       ).toLocaleString("id-ID")}
-                    </td>
-                    <td className="py-3 px-2 sm:px-3">
-                      <FormField
-                        control={form.control}
-                        name={`items.${index}.keterangan`}
-                        render={({ field: itemField }) => (
-                          <FormItem>
-                            <FormControl>
-                              <Input
-                                placeholder="Keterangan..."
-                                {...itemField}
-                                className="w-full min-w-[120px]"
-                              />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
                     </td>
                     <td className="py-3 px-2 sm:px-3">
                       {fields.length > 1 && (

@@ -53,7 +53,7 @@ export function SectionCards({ data }: { data: { totalRevenue: number; totalTran
             Total pendapatan dari semua transaksi
           </div>
           <div className="text-muted-foreground">
-            Data diambil dari database
+            Berdasarkan total pendapatan dari semua transaksi
           </div>
         </CardFooter>
       </Card>

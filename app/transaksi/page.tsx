@@ -193,7 +193,7 @@ export default async function TransaksiPage() {
                   <div>
                     <h1 className="text-3xl font-semibold">Transaksi</h1>
                     <p className="text-gray-500 dark:text-gray-400 mt-1">
-                      Kelola transaksi dan pantau performa bisnis Anda
+                      Kelola transaksi dan pantau performa laundry Anda
                     </p>
                   </div>
                 </div>
